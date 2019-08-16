@@ -1,4 +1,4 @@
-const fs = rqeuire('fs');
+const fs = require('fs');
 const { app } = require('geum');
 
 const cache = {};
@@ -26,19 +26,62 @@ const cache = {};
  */
 app.config = (file, key = null, value = null) => {
   //1. Form the absolute path
-  //2. Check to see if the path exists
-  //2a.if it doesnt exist (use fs)
-    //return null
-  //2b. it does exist
+  const path = app.pwd + '/config/' + file;
+  const pathJSON = path + ".json";
+  const pathJS = path + ".js";
+
+  let valid = false;
+  [ path, pathJSON, pathJS].forEach(path => {
+    //if found then found = path;
+    if (!fs.exsistsSync(path)){
+      return null;
+    }
+    valid = path;
+  })
+
+  if (!valid) {
+    return null;
+  }
+
+  if(!fs.lstatSync(valid).isFile()) {
+    return null;
+  }
+
+  //2b. JSON file exists
+
   //3. Get the file (use fs)
+  var content = fs.readFileSync(valid, 'utf8');
+
   //4. Parse file (JSON.parse)
+
+  var parsed = JSON.parse(content);
+
   //5. if there is no key (ie null)
     //return the parsed data
-  //5a. There is a key...
-  // if there is no value (ie null)
+
+  if (key == null) {
+    return parsed;
+  }
+
+    // if there is no value (ie null)
     //return the key value in the parsed data
+
+  if (value == null) {
+    if (typeof parsed[key] == 'undefined') {
+      return null;
+    }
+
+    return parsed[key];
+  }
+
   //6. Set the value given the key name
+
+  parsed[key] = value;
+
   //7. Save back to the config file
-  //8. return this
+
+  fs.writeFileSync(valid,JSON.stringify(parsed))
+
   return this;
+
 }
