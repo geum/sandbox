@@ -15,6 +15,8 @@ const cache = {};
  * where `services` is found in `[PROJECT_PATH]/config/services.json`
  * You can determine project path using app.pwd OR process.env.PWD
  *
+ * see: https://github.com/CradlePHP/Cradle/blob/master/bootstrap/paths.php#L55-L116
+ *
  * @param {String} file - the name or path of the config file in the
  *                       `/config` directory
  * @param {String} [key = null] - the name of the key to return, if any
